@@ -1,31 +1,31 @@
+//목록화면
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Docs url</title>
   <link rel="stylesheet" href="/static/index.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-  <h1>Hello Express</h1>
-  <form action="/" method="post">
-    <input type="url" name="longUrl">
-    <input type="submit" value="전송">
-  </form>
-  <table>
-    <thead>
-      <tr>
-        <td>LongUrl</td>
-        <td>short Url</td>
-      </tr>
-    </thead>
-    <tbody>
-      <%data.forEach(item => {%>
+  <div class="wrap">
+    <h1>목 록 화 면</h1>
+    <a href="/input" class="button">작성</a>
+    <a href="/delete" class="button">삭제</a>
+    <table class="table type10">
+      <thead>
         <tr>
-          <td><%=item.longUrl %></td>
-          <td><a href="/<%=item.id %>" target="_blank"><%=item.id %></a></td>
+          <th>제목</td>
         </tr>
-      <%})%>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <%data.forEach(item => {%>
+          <tr>
+            <td><a href="/open/<%=item.id %>"><%=item.title %></a></td>
+          </tr>
+        <%})%>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

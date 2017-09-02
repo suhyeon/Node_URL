@@ -1,0 +1,30 @@
+//글 입력화면
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Docs url</title>
+  <link rel="stylesheet" href="/static/index.css">
+  <link rel=“stylesheet” href=“http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css“>
+</head>
+<body>
+  <div class="wrap">
+    <h1>글 입력화면</h1>
+    <form action="/input" method="post">
+      <table class="table type10">
+        <thead>
+          <tr>
+            <td><input class="title" type="textArea" name="title" value="title"></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input class="body" type="textArea" name="body" value="body"></td>
+          </tr>
+        </tbody>
+      </table>
+      <input required type="submit" value="전송">
+    </form>
+  </div>
+</body>
+</html>

@@ -1,61 +1,99 @@
 const express = require('express')
-const basicAuth = require('express-basic-auth')
-const morgan = require('morgan')
-const random = require('randomstring')
 const bodyParser = require('body-parser')
+const basicAuth = require('express-basic-auth')
+
 const data = [
-  {longUrl: 'http://google.com', id: random.generate(6)}
+  {
+    id: 0,
+    title: 'tkfktkfk',
+    body: 'rkfkskdf'
+  }
 ]
-
-//http://localhost:3000/id
-//302 response
-
-const app = express()
-
+const review = [
+  {
+    id: data.length-1,
+    review: 'review'
+  }
+]
 const authMiddleware = basicAuth({
   users: { 'admin': 'admin' },
   challenge: true,
   realm: 'Imb4T3st4pp'
 })
 const bodyParsermiddleware = bodyParser.urlencoded({ extended: false })
-
-// parse application/x-www-form-urlencoded 
-
+const app = express()
 app.use('/static', express.static('public'))
-app.use(morgan('tiny'))
 
 app.set('view engine', 'ejs')
 
-app.get('/',authMiddleware, (req,res) => {
+app.get('/',(req,res) => {
   res.render('index.ejs', {data})
 })
-
-app.get('/:id', (req,res) => {
-  const id = req.params.id
-  const match = data.find(item => item.id === id)
+app.get('/input', (req,res) => {
+  res.render('input.ejs')
+})
+app.get('/open/:id', (req,res) => {
+  const match = data.find(item => item.id === req.params.id*1)
   if(match){
-    res.redirect(301, match.longUrl)
+    res.render('open.ejs', {match, review: review})
   }else{
     res.status(404)
-    res.send('404 Not found')
+    res.send('404 Notfound')
   }
 })
-
-app.post('/', authMiddleware,bodyParsermiddleware, (req, res) => {
-  const longUrl = req.body.longUrl
-  let id
-  while(true){
-    const candidate = random.generate(6)
-    const match = data.find(item => item.id === candidate)
-    if(!match){
-      id = candidate
-      break
-    }
+app.post('/input', bodyParsermiddleware,(req,res) => {
+  const title = req.body.title
+  const body = req.body.body 
+  let arr = []
+  for(var i = 0; i<data.length; i++){
+    arr = data.pop()
   }
-  data.push({longUrl, id})
-  res.redirect('/')
+  data.push(arr)
+  if(title){
+    const n = {
+      id: data.length,
+      title,
+      body
+    }
+    data.push(n)
+    res.redirect('/')
+  }else{
+    res.status(404)
+    res.send('404 input No')
+  }
+})
+app.post('/open/:id/review', bodyParsermiddleware,(req,res) => {
+  const match = data.find(item => item.id === req.params.id*1)
+  const rep = req.body.review
+  const re = {
+    id: data.length - 1,
+    review: rep
+  }
+  console.log(rep)
+  if(rep){
+    review.push(re)
+    console.log(review)
+  }else{
+    res.status(404)
+    res.send('input review')
+  }
+  res.redirect('/open/' + `${match.id}`)
+})
+app.get('/delete', authMiddleware,(req,res) => {
+  res.render('delete.ejs', {data})
+})
+app.post('/delete/:id',bodyParsermiddleware ,(req,res) => {
+  const match = data.findIndex(item => item.id === req.params.id*1)
+  console.log(match)
+  if(match!== -1){
+    data.splice(match, 1)
+    res.redirect('/')
+  }else{
+    res.status(400)
+    res.send('400 bad request')
+  }
 })
 
 app.listen(3000, () => {
-  console.log('3000port now Listening!!!!!!')
+  console.log('listening...')
 })

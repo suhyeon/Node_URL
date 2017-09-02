@@ -1,0 +1,35 @@
+//글 삭제 화면
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Docs url</title>
+  <link rel="stylesheet" href="/static/index.css">
+  <link rel=“stylesheet” href=“http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css“>
+</head>
+<body>
+  <div class="wrap">
+    <h1><a href="/"></a>글 삭제 화면</h1>
+    <table class="table type10">
+      <thead>
+        <tr>
+          <th>글 번호</th>
+          <th>제목</th>
+          <th>삭제</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%data.forEach(item => {%>
+        <form  id="form-delete" action="/delete/<%=item.id%>" method="post">
+          <tr>
+            <td><%=item.id %></td>
+            <td><%=item.title %></td>
+            <td><input required type="submit" value="삭제"></td>
+          </tr>
+        </form>
+        <%})%>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
